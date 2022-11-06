@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>button in the center</title>
+    <style>
+        .container{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        button{
+            border: none;
+            border-radius: 15px;
+            padding: 1rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="btn">call ambulance</button>
+    </div>
+    <script>
+        const theButton = document.getElementById('btn');
+        theButton.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    console.log(pos);
+                    console.log(pos.coords);
+                    const response = await fetch(`http://localhost:8181/${pos.coords.latitude}/${pos.coords.longitude}`, {
+                        method: "POST"
+                    });
+                    const json = await response.json();
+                    console.log(json);
+                });
+            }
+        });
+
+        // document.getElementById("btn").addEventListener("click", callambulance);
+        // function callambulance(){
+        // if(navigator.geolocation){
+        //     navigator.geolocation.getCurrentPosition(async (pos)=>{
+        //         console.log(pos);
+        //         const response = await fetch('http://localhost:8181', {
+        //             body: JSON.stringify({ location: pos })
+        //         });
+        //         const json = await response.json();
+        //         console.log(json);
+        //     })
+        // }else{
+        //     console.log("geolocation is not supported by this browser.");
+        // }
+        // }
+    </script>
+    <script src="https://apis.mapmyindia.com/advancedmaps/api/{token-OR-JWT-key}/map_sdk_plugins"></script>
+</body>
+</html>
